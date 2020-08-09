@@ -135,11 +135,14 @@ class rebuildUI(QtWidgets.QWidget):
 
 			# Re-construct the dag hierarchy.
 			for child, position in self.children.iteritems():
-				mc.parent(child, self.jnts[int(round((len(self.jnts)) * (1 - position)))])
+				try:
+					mc.parent(child, self.jnts[int(round((len(self.jnts)) * (1 - position)))])
+				except (RuntimeError, ValueError):
+					pass
 			if self.topParent:
 				try:
 					mc.parent(self.jnts[-1], self.topParent)
-				except RuntimeError:
+				except (RuntimeError, ValueError):
 					pass
 
 			mc.undoInfo(closeChunk=True)
